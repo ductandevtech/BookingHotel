@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Room</title>
+</head>
+<body>
+    <h1>Add New Room</h1>
+    <form id="addRoomForm" enctype="multipart/form-data">
+        <div>
+            <label for="photo">Room Photo:</label>
+            <input type="file" id="photo" name="photo" accept="image/*" required>
+        </div>
+        <div>
+            <label for="roomType">Room Type:</label>
+            <input type="text" id="roomType" name="roomType" required>
+        </div>
+        <div>
+            <label for="roomPrice">Room Price:</label>
+            <input type="number" id="roomPrice" name="roomPrice" step="0.01" required>
+        </div>
+        <div>
+            <button type="submit">Add Room</button>
+        </div>
+    </form>
+
+    <script>
+        document.getElementById('addRoomForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const form = event.target;
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch('/rooms/add/new-room', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const roomResponse = await response.json();
+                    alert('Room added successfully! Room ID: ' + roomResponse.id);
+                } else {
+                    alert('Failed to add room.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while adding the room.');
+            }
+        });
+    </script>
+</body>
+</html>
